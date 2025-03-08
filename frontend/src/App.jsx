@@ -47,7 +47,7 @@ const App = () => {
     if (!facultyId) return;
 
     try {
-      const response = await fetch(`https://examslotbooker-3.onrender.com/${facultyId}`);
+      const response = await fetch(`https://examslotbooker-3.onrender.com/faculty-profile/${facultyId}`);
       if (!response.ok) {
         throw new Error("Failed to fetch faculty data");
       }
@@ -101,7 +101,7 @@ const App = () => {
     }
 
     try {
-      const response = await fetch("https://examslotbooker-3.onrender.com", {
+      const response = await fetch("https://examslotbooker-3.onrender.com/book-room", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
@@ -143,7 +143,7 @@ const App = () => {
     }
 
     try {
-      const response = await fetch(`https://examslotbooker-3.onrender.com`, {
+      const response = await fetch(`https://examslotbooker-3.onrender.com/update-profile`, {
         method: "PUT",
         headers: {
           "Authorization": `Bearer ${localStorage.getItem("token")}`,
@@ -184,9 +184,9 @@ const App = () => {
   ];
 
   const dutyData = [
-    { name: "Exam", value: bookings.filter((b) => b.duty === "Exam").length },
-    { name: "Bundle", value: bookings.filter((b) => b.duty === "Bundle").length },
-    { name: "Renewal", value: bookings.filter((b) => b.duty === "Renewal").length },
+    { name: "Exam", value: bookings.filter((b) => b.dutyType === "Exam").length },
+    { name: "Bundle", value: bookings.filter((b) => b.dutyType === "Bundle").length },
+    { name: "Renewal", value: bookings.filter((b) => b.dutyType === "Renewal").length },
   ];
 
   return (
