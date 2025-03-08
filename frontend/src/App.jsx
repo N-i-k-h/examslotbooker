@@ -4,7 +4,7 @@ import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import { FaBars, FaUser, FaChartLine, FaCalendarAlt, FaCog, FaSignOutAlt, FaEnvelope, FaPhoneAlt, FaBuilding } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
-
+import React, { useState } from "react";
 const App = () => {
   const [activeSection, setActiveSection] = useState("profile");
   const [facultyData, setFacultyData] = useState(null);
