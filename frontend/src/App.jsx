@@ -4,7 +4,7 @@ import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import { FaBars, FaUser, FaChartLine, FaCalendarAlt, FaCog, FaSignOutAlt, FaEnvelope, FaPhoneAlt, FaBuilding } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
-
+import React, { useState } from "react";
 const App = () => {
   const [activeSection, setActiveSection] = useState("profile");
   const [facultyData, setFacultyData] = useState(null);
@@ -47,7 +47,7 @@ const App = () => {
     if (!facultyId) return;
 
     try {
-      const response = await fetch(`http://localhost:5000/faculty-profile/${facultyId}`);
+      const response = await fetch(`https://examslotbooker-3.onrender.com/faculty-profile/${facultyId}`);
       if (!response.ok) {
         throw new Error("Failed to fetch faculty data");
       }
@@ -101,7 +101,7 @@ const App = () => {
     }
 
     try {
-      const response = await fetch("http://localhost:5000/book-room", {
+      const response = await fetch("https://examslotbooker-3.onrender.com/book-room", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
@@ -143,7 +143,7 @@ const App = () => {
     }
 
     try {
-      const response = await fetch(`http://localhost:5000/update-profile`, {
+      const response = await fetch(`https://examslotbooker-3.onrender.com/update-profile`, {
         method: "PUT",
         headers: {
           "Authorization": `Bearer ${localStorage.getItem("token")}`,
@@ -184,9 +184,9 @@ const App = () => {
   ];
 
   const dutyData = [
-    { name: "Exam", value: bookings.filter((b) => b.duty === "Exam").length },
-    { name: "Bundle", value: bookings.filter((b) => b.duty === "Bundle").length },
-    { name: "Renewal", value: bookings.filter((b) => b.duty === "Renewal").length },
+    { name: "Exam", value: bookings.filter((b) => b.dutyType === "Exam").length },
+    { name: "Bundle", value: bookings.filter((b) => b.dutyType === "Bundle").length },
+    { name: "Renewal", value: bookings.filter((b) => b.dutyType === "Renewal").length },
   ];
 
   return (
@@ -242,7 +242,7 @@ const App = () => {
             {/* Blue Header */}
             <div className="bg-blue-500 h-48 relative">
               <img
-                src={facultyData.imageUrl ? `http://localhost:5000${facultyData.imageUrl}` : "https://via.placeholder.com/150"}
+                src={facultyData.imageUrl ? `https://examslotbooker-3.onrender.com${facultyData.imageUrl}` : "https://via.placeholder.com/150"}
                 alt="Faculty"
                 className="w-52 h-52 border-4 border-white rounded-full absolute left-1/2 transform -translate-x-1/2 -bottom-14"
               />

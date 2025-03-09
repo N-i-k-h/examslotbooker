@@ -12,13 +12,22 @@ import { fileURLToPath } from "url";
 dotenv.config();
 const app = express();
 app.use(express.json());
-app.use(cors());
+
+// CORS Configuration
+const corsOptions = {
+  origin: 'https://examslotbooker-yx69-4upad6au6-nikhil-kashyap-k-ns-projects.vercel.app', // Your frontend URL
+  optionsSuccessStatus: 200,
+  methods: "GET,HEAD,PUT,PATCH,POST,DELETE",
+  credentials: true,
+};
+
+app.use(cors(corsOptions));
 app.use("/uploads", express.static("uploads"));
 
 // Get the directory name
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
-// ✅ JWT Middleware
+// JWT Middleware
 const authenticate = (req, res, next) => {
   const token = req.headers.authorization?.split(" ")[1];
   if (!token) return res.status(401).json({ message: "Unauthorized" });
@@ -33,7 +42,7 @@ const authenticate = (req, res, next) => {
   }
 };
 
-// ✅ MongoDB Connection
+// MongoDB Connection
 mongoose
   .connect(process.env.MONGO_URI, { useNewUrlParser: true, useUnifiedTopology: true })
   .then(() => console.log("✅ MongoDB Connected"))
@@ -42,7 +51,7 @@ mongoose
     process.exit(1);
   });
 
-// ✅ Faculty Schema
+// Faculty Schema
 const FacultySchema = new mongoose.Schema({
   name: { type: String, required: true },
   facultyId: { type: String, unique: true, required: true },
@@ -68,7 +77,7 @@ const FacultySchema = new mongoose.Schema({
 
 const Faculty = mongoose.model("Faculty", FacultySchema);
 
-// ✅ Multer for Image Upload
+// Multer for Image Upload
 const storage = multer.diskStorage({
   destination: "uploads/",
   filename: (req, file, cb) => {
@@ -88,7 +97,7 @@ const fileFilter = (req, file, cb) => {
 
 const upload = multer({ storage, fileFilter });
 
-// ✅ Faculty Registration API
+// Faculty Registration API
 app.post("/register", upload.single("image"), async (req, res) => {
   try {
     const { name, facultyId, email, phone, designation, branch, password, confirmPassword } = req.body;
@@ -132,7 +141,7 @@ app.post("/register", upload.single("image"), async (req, res) => {
   }
 });
 
-// ✅ Login API
+// Login API
 app.post("/login", async (req, res) => {
   try {
     const { facultyId, password } = req.body;
@@ -157,7 +166,7 @@ app.post("/login", async (req, res) => {
   }
 });
 
-// ✅ Fetch Faculty Profile
+// Fetch Faculty Profile
 app.get("/faculty-profile/:facultyId", async (req, res) => {
   try {
     const faculty = await Faculty.findOne({ facultyId: req.params.facultyId }).select("-password");
@@ -170,7 +179,7 @@ app.get("/faculty-profile/:facultyId", async (req, res) => {
   }
 });
 
-// ✅ Booking API
+// Booking API
 app.post("/book-room", async (req, res) => {
   try {
     const { facultyId, date, timeSlot, dutyType } = req.body;
@@ -207,7 +216,7 @@ app.post("/book-room", async (req, res) => {
   }
 });
 
-// ✅ Profile Update API
+// Profile Update API
 app.put("/update-profile", authenticate, upload.single("image"), async (req, res) => {
   try {
     const { name, email, phone, designation, branch } = req.body;
@@ -263,13 +272,15 @@ app.put("/update-profile", authenticate, upload.single("image"), async (req, res
   }
 });
 
-// ✅ Global Error Handler
+// Global Error Handler
 app.use((err, req, res, next) => {
   console.error("❌ Unhandled Error:", err);
   res.status(500).json({ message: "Internal Server Error" });
 });
 
-// ✅ Start Server
+// Start Server
 const PORT = process.env.PORT || 5000;
-app.listen(PORT, () => console.log(`✅ Server running on http://localhost:${PORT}`));
- 
+const localIP = '0.0.0.0'; // Listen on all network interfaces
+app.listen(PORT, localIP, () => {
+  console.log(`✅ Server running on http://${localIP}:${PORT}`);
+});
