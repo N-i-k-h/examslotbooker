@@ -8,11 +8,7 @@ export default defineConfig({
   [
     react(),
     tailwindcss(),
-  
-<<<<<<<< HEAD:frontend/vite.config.js
-  ],base: "./",
-========
-  ],
-  base: "./",
->>>>>>>> c8f383754171112eac2f2ae02f4b6c5afce6a0a7:frontend/src/vite.config.js
+
+  ],base: "./"
+ 
 })
